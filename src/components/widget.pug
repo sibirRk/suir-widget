@@ -1,0 +1,88 @@
+include ../../node_modules/bempug/index
+
+- BEMPUG.modifier = '_'
+
+
++b('flow-catalog-panel', bem)&attributes(attributes)
+  +e('wrapper')
+    +e('show-catalog-btn')(@click="showFlowCatalog = !showFlowCatalog")
+      +e('img', {}, 'img')(src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAABZSURBVHgB7ZLBCQAgDAOLE7ihbu4IdYNaQcGHStGPSA4CEoQ2JUTgOUQkqliVVOHU3w2oHzt86nfcZIYf3vnCXyaIbSuenMLsfwxaRIYEaNEetIgMCdCizygiV5voZUZ8MwAAAABJRU5ErkJggg==")
+      +e('text') Сайты Краснодарского края
+
+    +b('flow-catalog')(v-if="catalog" :class="{ active : showFlowCatalog }")&attributes(attributes)
+      +e('show-about-btn')(v-if="!showAboutPage && isMobile" @click="showAboutPage = true" :class="{ 'd-hide' : !mobHide }")
+        +e('show-about-text') О каталоге
+        +e('show-about-icon', {}, 'img')(:src="imgs.rightBtn")
+      +e('show-catalog-btn')(v-if="showAboutPage && isMobile" @click="showAboutPage = false" :class="{ 'd-hide' : !mobHide }")
+        +e('show-catalog-icon', {}, 'img')(:src="imgs.backBtn")
+        +e('show-catalog-text') Каталог
+
+      +e('wrapper')
+        transition(name="fade" mode="out-in")
+          +e('page', {m: 'about'})(v-if="showAboutPage")
+            +e('title-panel')
+              +e('about-logo')
+                //-+e('logo-img', {}, 'img')(:src="catalog.about.logo")
+                +e('logo-img', {}, 'img')(:src="imgs.mainLogo")
+              +e('title') {{ catalog.about.title }}
+            +e('descr')
+              +e('descr-p', {}, 'p')(v-for="p in catalog.about.descr") {{ p }}
+            +e('alerts')
+              +e('alert')(v-for="alert in catalog.alerts")
+                +e('sign')(v-if="alert.type")
+                  +e('sign-img', {}, 'img')(:src="setAlertSign(alert.type)")
+                +e('alert-wrapper')
+                  +e('alert-title')(:class="alert.type") {{ alert.title }}
+                  +e('alert-descr', {}, 'p') {{ alert.descr }}
+                  +e('alert-src') {{ alert.src }}
+                  +e('alert-end')
+                    +e('alert-time') {{ alert.time }}
+                    +e('alert-url', {}, 'a')(:href="alert.url") Подробнее
+
+        +e('page', {m: 'catalog'})(:class="{ 'has-bg' : !showAboutPage, 'mob-hidden' : path.length || showAboutPage }")
+          +e('title-panel')
+            +e('back-btn', {}, 'a')(href="#" v-if="!showAboutPage && path.length" @click.prevent="removeFromPath")
+              +e('back-btn-img', {}, 'img')(:src="imgs.backBtn")
+            +e('title')(@click.prevent="removeFromPath") Категории
+
+          +e('search')
+            //+e('search-input', {}, 'input')(type="text" placeholder="Поиск")
+            model-select(:options="searchOptions" v-model="searchChosen" placeholder="Поиск")
+            +e('search-icon', {}, 'img')(:src="imgs.searchIcon")
+
+
+          +e('categories')
+            +e('category')(v-for="cat in left" @click="catalogItemClick" :data-id="cat.id")
+              +e('category-title') {{ cat.title }}
+              +e('category-descr') {{ cat.descr }}
+
+        transition(name="fade" mode="out-in")
+          +e('page', {m: 'data'})(v-if="!showAboutPage && right" :class="{ 'mob-hidden' : !path.length || showAboutPage }")
+            +e('data-wrapper')
+
+              +e('list')(v-if="!right.link")
+                +e('title-panel')
+                  +e('back-btn', {}, 'a')(href="#" v-if="isMobile && !showAboutPage" @click.prevent="removeFromPath")
+                    +e('back-btn-img', {}, 'img')(:src="imgs.backBtn")
+                  +e('title') {{ rightTitle }}
+
+                +e('categories')
+                  +e('category')(v-for="cat in right" @click="catalogItemClick" :data-id="cat.id")
+                    +e('category-title') {{ cat.title }}
+                    +e('category-descr') {{ cat.descr }}
+
+              +e('detail')(v-if="right.link")
+                +e('title-panel')
+                  +e('back-btn', {}, 'a')(href="#" v-if="isMobile" @click.prevent="removeFromPath")
+                    +e('back-btn-img', {}, 'img')(:src="imgs.backBtn")
+                  +e('title') {{ right.title }}
+                +e('descr')
+                  +e('descr-p', {}, 'p')(v-html="right.activity")
+                +e('contacts')
+                  +e('title', {m: 'sub'}) Контакты
+                  +e('url', {}, 'a')(:href="right.link") {{ right.link }}
+                  +e('address') {{ right.address }}
+                  +e('advanced')(v-html="right.advancedInfo")
+                +e('more-btn', {}, 'a')(:href="right.link")
+                  +e('more-text') Подробная информация
+                  +e('more-icon', {}, 'img')(:src="imgs.rightBtn")

@@ -1,0 +1,71 @@
+.alert {
+  $self: &;
+
+  font-family: 'GOST UI2', sans-serif;
+  margin-bottom: 24px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  #{$self}__wrapper {
+    padding: 20px;
+    background-color: rgba($light, .6);
+    border-radius: 4px;
+  }
+
+  #{$self}__inner {
+    position: relative;
+    //padding-right: 58px;
+    &_with-icon {
+      padding-left: 33px;
+    }
+  }
+
+  #{$self}__icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 23px;
+    width: 23px;
+  }
+
+  #{$self}__title {
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    &_danger {
+      color: #E53935;
+    }
+    &_success {
+      color: #6FBD15;
+    }
+  }
+
+  #{$self}__description {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba($oxford-blue, .8);
+    margin-bottom: 5px;
+  }
+
+  #{$self}__source, #{$self}__time {
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(#606676, .7);
+  }
+
+  #{$self}__source {
+    margin-bottom: 5px;
+  }
+
+  #{$self}__more-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-weight: 400;
+    font-size: 10px;
+    color: $royal-blue;
+  }
+
+}
