@@ -3,7 +3,7 @@ include ../../node_modules/bempug/index
 - BEMPUG.modifier = '_'
 
 
-+b('flow-catalog-panel', bem)&attributes(attributes)
++b('flow-catalog-panel', bem)(:class="colorTheme")&attributes(attributes)
   +e('wrapper')
     +e('show-catalog-btn')(@click="showFlowCatalog = !showFlowCatalog")
       +e('img', {}, 'img')(src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAABZSURBVHgB7ZLBCQAgDAOLE7ihbu4IdYNaQcGHStGPSA4CEoQ2JUTgOUQkqliVVOHU3w2oHzt86nfcZIYf3vnCXyaIbSuenMLsfwxaRIYEaNEetIgMCdCizygiV5voZUZ8MwAAAABJRU5ErkJggg==")
@@ -86,3 +86,10 @@ include ../../node_modules/bempug/index
                 +e('more-btn', {}, 'a')(:href="right.link")
                   +e('more-text') Подробная информация
                   +e('more-icon', {}, 'img')(:src="imgs.rightBtn")
+
+  +b('flow-catalog-alerts')(v-if="catalog && !!alerts.length")
+    +b('flow-catalog-alert')(v-if="isAlertClosed(alert)" v-for="alert in catalog.alerts" :style="alertBg(alert)" :data-date-id="alert.dateId")
+        +e('wrapper')
+          +e('text') {{ alert.descr }}
+        +e('close')(@click="closeAlert")
+          +e('close-img', {}, 'img')(:src="imgs.close")
